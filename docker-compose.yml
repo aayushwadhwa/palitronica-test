@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  customer_db:
+    image: mysql:5.7
+    volumes:
+      - "./database/.mysql-data/db:/var/lib/mysql"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: customer
+      MYSQL_USER: customer
+      MYSQL_PASSWORD: customerpw
+  customer_server:
+    image: server
+    ports:
+    - 3000:3000
+    restart: always
+    depends_on:
+    - customer_db
+  customer_frontend:
+    image: frontend
+    ports:
+    - 3006:3000
+    restart: always
+    stdin_open: true
+    depends_on:
+    - customer_server
